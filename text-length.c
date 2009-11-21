@@ -24,7 +24,7 @@ int main (int argc, char **argv) {
 
 static void compute_text_length (char *font_name, char *text) {
 
-	cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1024, 300);
+	cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 0, 0);
 	cairo_t *cr = cairo_create(surface);
 
 
