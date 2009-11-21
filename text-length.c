@@ -3,34 +3,42 @@
 #include <pango/pangocairo.h>
 #include <cairo/cairo.h>
 
-static void compute_text_length (char *font, char *text, int *width, int *height);
+static void compute_text_length (char *font, char *text, char *filename, int *width, int *height);
 
 int main (int argc, char **argv) {
 	
-	if (argc != 3) {
-		g_print("Usage: font text\n");
+	if (argc < 3) {
 		g_print("Usage: font text [filename]\n");
 		return 1;
 	}
 	char *font = argv[1];
 	char *text = argv[2];
+	char *filename = argc > 2 ? argv[3] : NULL;
 
 	
 	g_type_init();
 
 	int width, height;
-	compute_text_length(font, text, &width, &height);
+	compute_text_length(font, text, filename, &width, &height);
 	g_print("Converting %s using font %s %dx%d\n", text, font, width, height);
 
 	return 0;
 }
 
 
-static void compute_text_length (char *font, char *text, int *width, int *height) {
+static void compute_text_length (char *font, char *text, char *filename, int *width, int *height) {
 
-	cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 0, 0);
+	int w, h;
+	if (filename) {
+		w = 1024;
+		h = 256;
+	}
+	else {
+		w = 0;
+		h = 0;
+	}
+	cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
 	cairo_t *cr = cairo_create(surface);
-
 
 	PangoLayout *layout = pango_cairo_create_layout(cr);
 	pango_layout_set_text(layout, text, -1);
@@ -41,9 +49,9 @@ static void compute_text_length (char *font, char *text, int *width, int *height
 	
 	pango_layout_get_pixel_size(layout, width, height);
 
-	if (FALSE) {
+	if (filename) {
 		pango_cairo_show_layout(cr, layout);
-		cairo_surface_write_to_png(surface, "a.png");
+		cairo_surface_write_to_png(surface, filename);
 	}
 
 	g_object_unref(layout);
