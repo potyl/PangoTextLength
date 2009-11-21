@@ -41,7 +41,7 @@ static void compute_text_length (char *font_name, char *text) {
 	//int width = pango_layout_get_width(layout);
 	g_print("Converting %s using font %s %dx%d\n", text, font_name, width, height);
 
-	if (TRUE) {
+	if (FALSE) {
 		pango_cairo_show_layout(cr, layout);
 		cairo_surface_write_to_png(surface, "a.png");
 	}
