@@ -24,22 +24,29 @@ int main (int argc, char **argv) {
 
 static void compute_text_length (char *font_name, char *text) {
 
-	PangoFontMap *fontmap = pango_cairo_font_map_get_default();
-	PangoContext *context = pango_font_map_create_context(fontmap);
+	cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1024, 300);
+	cairo_t *cr = cairo_create(surface);
 
-//	PangoContext *context = pango_context_new();
-	PangoFontDescription *desc = pango_font_description_from_string(font_name);
-	pango_context_set_font_description(context, desc);
-	PangoLayout *layout = pango_layout_new(context);
+
+	PangoLayout *layout = pango_cairo_create_layout(cr);
 	pango_layout_set_text(layout, text, -1);
+
+	PangoFontDescription *desc = pango_font_description_from_string(font_name);
 	pango_layout_set_font_description(layout, desc);
+	pango_font_description_free(desc);
 	
 	int width, height;
 	pango_layout_get_pixel_size(layout, &width, &height);
 
 	//int width = pango_layout_get_width(layout);
-	g_print("Converting %s: %s length: %d\n", font_name, text, width);
+	g_print("Converting %s using font %s %dx%d\n", text, font_name, width, height);
 
-	pango_font_description_free(desc);
-	g_object_unref(context);
+	if (TRUE) {
+		pango_cairo_show_layout(cr, layout);
+		cairo_surface_write_to_png(surface, "a.png");
+	}
+
+	g_object_unref(layout);
+	cairo_destroy(cr);
+	cairo_surface_destroy(surface);
 }
