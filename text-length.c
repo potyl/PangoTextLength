@@ -1,5 +1,5 @@
 #include <pango/pango.h>
-#include <glib/glib.h>
+#include <glib.h>
 #include <pango/pangocairo.h>
 #include <cairo/cairo.h>
 
