@@ -16,8 +16,6 @@ int main (int argc, char **argv) {
 	char *filename = argc > 2 ? argv[3] : NULL;
 
 	
-	g_type_init();
-
 	int width, height;
 	compute_text_length(font, text, filename, &width, &height);
 	g_print("Converting %s using font %s %dx%d\n", text, font, width, height);
